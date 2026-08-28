@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 
 import { getAllHeroSections } from "../utils/apiCalls";
-import { MAIN_SITE_URL } from "../utils/api";
+import { MAIN_SITE_URL, API_HOST } from "../utils/api";
 
 export default function HeroSection() {
   const [heroes, setHeroes] = useState([]);
@@ -58,7 +58,7 @@ export default function HeroSection() {
             className="absolute inset-0"
           >
             <img
-              src={`https://api.clubpromfg.com${currentHero.imageUrl}`}
+              src={`${API_HOST}${currentHero.imageUrl}`}
               alt={currentHero.imgAlt || currentHero.title}
               className="w-full h-full object-cover"
             />

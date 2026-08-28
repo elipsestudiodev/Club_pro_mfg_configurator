@@ -7,6 +7,7 @@ import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import cardImg from "/assets/cpm_club_car.webp";
 import logo from "/assets/e-z-go.webp";
+import { API_HOST } from "../utils/api";
 
 export default function GolfCartBuilder() {
   const { brandSlug } = useParams();
@@ -23,7 +24,7 @@ export default function GolfCartBuilder() {
       };
 
       const res = await axios.get(
-        `http://api.clubpromfg.com/api/brands/${brandMap[brandSlug]}`
+        `${API_HOST}/api/brands/${brandMap[brandSlug]}`
       );
 
       setBrand(res.data);

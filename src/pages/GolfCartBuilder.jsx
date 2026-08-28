@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import cardImg from "/assets/cpm_club_car.webp";
-import { api, BASE_URL } from "../utils/api";
+import { api, BASE_URL, API_HOST } from "../utils/api";
 
 // Skeleton Loader Component
 const SkeletonLoader = () => (
@@ -328,7 +328,7 @@ export default function GolfCartBuilder() {
           </div>
           {brandLogo ? (
             <img
-              src={`https://api.clubpromfg.com${brandLogo}`}
+              src={`${API_HOST}${brandLogo}`}
               alt={`${brand?.name} Logo`}
               className="h-6 md:h-10 object-contain"
             />
@@ -352,7 +352,7 @@ export default function GolfCartBuilder() {
                 aria-label="Selected golf cart configuration preview"
               >
                 <img
-                  src={`https://api.clubpromfg.com/uploads/products/${currentImage}`}
+                  src={`${API_HOST}/uploads/products/${currentImage}`}
                   alt="Product preview"
                   className="max-h-full max-w-full object-contain"
                 />
