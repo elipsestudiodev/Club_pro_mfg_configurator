@@ -41,8 +41,9 @@ export default function Checkout() {
         items: carts.map(item => ({
           id: item.id,
           name: item.name,
-          price: item.price,
-          qty: item.qty,
+          price: Number(item.price),
+          qty: Number(item.qty || item.quantity || 1),
+          quantity: Number(item.qty || item.quantity || 1),
         })),
       };
 
