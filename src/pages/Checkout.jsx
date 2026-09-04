@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import cardImg from "/assets/cpm_club_car.webp";
 import { ArrowRight, Trash2, ShoppingCart, Check } from "lucide-react";
@@ -6,6 +7,7 @@ import { api, BASE_URL } from "../utils/api";
 const stripePromise = loadStripe("pk_test_51SqJktJYkUUyRPvjEa2ZgYsjgiYBpp3LxxYbRnLCTkDjh84j6P7neAgiX09VqQd6AAVdQNsT5GShmCYFjYSjDoKJ00YYTJG23B"); // 🔑 Replace
 
 export default function Checkout() {
+  const navigate = useNavigate();
   const { carts, updateQty, removeItem, clearCart } = useCart();
   const items = carts || []; // flat array of products
 
@@ -19,6 +21,12 @@ export default function Checkout() {
 
   const handleStripeCheckout = async () => {
     const token = localStorage.getItem("token"); // get token at the time of request
+
+    if (!token) {
+      alert("Please log in to proceed with checkout.");
+      navigate("/login");
+      return;
+    }
 
     try {
       // Optional stock check
@@ -48,9 +56,24 @@ export default function Checkout() {
         body: JSON.stringify(body),
       });
 
+      if (response.status === 401) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        alert("Your session has expired. Please log in again to complete checkout.");
+        navigate("/login");
+        return;
+      }
+
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText || "Stripe session request failed");
+        let errorMsg = "Stripe session request failed";
+        try {
+          const errorData = await response.json();
+          errorMsg = errorData.message || errorMsg;
+        } catch {
+          const text = await response.text();
+          errorMsg = text || errorMsg;
+        }
+        throw new Error(errorMsg);
       }
 
       const data = await response.json();
@@ -60,6 +83,13 @@ export default function Checkout() {
 
     } catch (err) {
       console.error("Stripe checkout failed:", err);
+      if (err.message && (err.message.includes("Invalid token") || err.message.includes("Unauthorized"))) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        alert("Your session has expired. Please log in again.");
+        navigate("/login");
+        return;
+      }
       alert("Checkout failed: " + err.message);
     }
   };
