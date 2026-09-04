@@ -1,7 +1,7 @@
 // src/api/api.js
 
-export const API_HOST = "http://localhost:5050"; // local api host (no /api, /uploads etc.)
-// export const API_HOST = "https://api.clubpromfg.com"; // live api host
+// export const API_HOST = "http://localhost:5050"; // local api host (no /api, /uploads etc.)
+export const API_HOST = "https://api.clubpromfg.com"; // live api host
 
 export const BASE_URL = `${API_HOST}/api`; // local api url
 // export const BASE_URL = "https://api.clubpromfg.com/api"; // live api url
